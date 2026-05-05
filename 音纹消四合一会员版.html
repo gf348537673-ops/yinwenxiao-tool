@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>音纹消会员版（唯一客服微信：g18678786135）</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Microsoft YaHei,Arial,sans-serif}
+body{background:#f5f7fa;padding:20px}
+.container{max-width:1200px;margin:0 auto;background:#fff;border-radius:12px;padding:30px;}
+.title{text-align:center;font-size:26px;margin-bottom:20px;color:#222}
+.title span{color:#007bff;font-size:18px}
+
+.device-bar{display:flex;align-items:center;gap:10px;background:#f8f9fa;padding:14px;border-radius:8px;margin-bottom:15px;flex-wrap:wrap}
+.device-label{font-size:15px}
+.device-code{font-family:monospace;color:#007bff}
+.copy-btn{background:#007bff;color:#fff;border:none;padding:6px 12px;border-radius:4px;cursor:pointer}
+.active-input{flex:1;min-width:220px;padding:8px;border:1px solid #ddd;border-radius:4px}
+.active-btn{background:#28a745;color:#fff;border:none;padding:8px 16px;border-radius:4px;cursor:pointer}
+
+.status-bar{background:#fff9e6;padding:12px;border-radius:8px;margin-bottom:20px;color:#d48806}
+.tab-bar{display:flex;gap:8px;margin-bottom:20px}
+.tab{padding:10px 18px;background:#e9ecef;border:none;border-radius:6px;cursor:pointer}
+.tab.active{background:#007bff;color:#fff}
+
+.panel{display:none}
+.panel.active{display:block}
+
+.upload-box{position:relative;border:2px dashed #007bff;border-radius:8px;padding:40px;text-align:center;background:#f8fbff;margin-bottom:10px;}
+.real-file{position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;cursor:pointer;}
+.file-info{font-size:14px;text-align:center;margin-bottom:10px}
+.tip{font-size:14px;color:#666;margin-bottom:10px}
+
+.start-btn{background:#dc3545;color:#fff;border:none;padding:12px 24px;border-radius:6px;cursor:pointer;width:100%;margin-bottom:15px}
+.progress{height:8px;background:#e9ecef;border-radius:4px;overflow:hidden;margin-bottom:8px}
+.progress-fill{height:100%;background:#007bff;width:0%;transition:width 0.3s}
+.progress-text{text-align:center;font-size:13px;margin-bottom:15px}
+.download-btn{background:#28a745;color:#fff;border:none;padding:12px 24px;border-radius:6px;cursor:pointer;width:100%;display:none}
+
+.double-box{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px}
+.section{margin-bottom:20px}
+.section h3{font-size:16px;margin-bottom:10px;padding-left:6px;border-left:4px solid #007bff}
+.section p{font-size:14px;line-height:1.8}
+.red{color:#dc3545;font-weight:bold}
+a{color:#007bff;text-decoration:none}
+table{width:100%;border-collapse:collapse;margin:10px 0}
+table th,table td{border:1px solid #eee;padding:12px;text-align:center}
+</style>
+</head>
+<body>
+
+<div class="container">
+<h1 class="title">音纹消会员版 <span>（唯一客服微信：g18678786135）</span></h1>
+
+<div class="device-bar">
+<span class="device-label">本机机器码：<span class="device-code" id="deviceCode">DEV-XXXX</span></span>
+<button class="copy-btn" onclick="copyCode()">复制机器码</button>
+<input type="text" class="active-input" id="activeCode" placeholder="请输入36位激活码">
+<button class="active-btn" onclick="activeNow()">立即激活</button>
+</div>
+
+<div class="status-bar" id="statusBar">状态：未激活 | 剩余天数：0天 | 剩余次数：0次</div>
+
+<div class="tab-bar">
+<button class="tab active" onclick="setTab(1)">消波版</button>
+<button class="tab" onclick="setTab(2)">优化版</button>
+<button class="tab" onclick="setTab(3)">微噪版</button>
+<button class="tab" onclick="setTab(4)">综合版</button>
+</div>
+
+<div class="panel active" id="box1">
+<div class="upload-box">
+<input type="file" class="real-file" id="file1" accept=".wav" onchange="showFile(1,this)">
+点击或拖拽 WAV 音频上传
+</div>
+<div class="file-info" id="name1"></div>
+<div class="tip">仅支持 WAV 采样率≤48000</div>
+<button class="start-btn" onclick="doProcess(1,'消波版')">开始处理</button>
+<div class="progress"><div class="progress-fill" id="bar1"></div></div>
+<div class="progress-text" id="text1">等待处理</div>
+<button class="download-btn" id="down1">下载成品</button>
+</div>
+
+<div class="panel" id="box2">
+<div class="upload-box">
+<input type="file" class="real-file" id="file2" accept=".wav" onchange="showFile(2,this)">
+点击或拖拽 WAV 音频上传
+</div>
+<div class="file-info" id="name2"></div>
+<div class="tip">仅支持 WAV 采样率≤48000</div>
+<button class="start-btn" onclick="doProcess(2,'优化版')">开始处理</button>
+<div class="progress"><div class="progress-fill" id="bar2"></div></div>
+<div class="progress-text" id="text2">等待处理</div>
+<button class="download-btn" id="down2">下载成品</button>
+</div>
+
+<div class="panel" id="box3">
+<div class="upload-box">
+<input type="file" class="real-file" id="file3" accept=".wav" onchange="showFile(3,this)">
+点击或拖拽 WAV 音频上传
+</div>
+<div class="file-info" id="name3"></div>
+<div class="tip">仅支持 WAV 采样率≤48000</div>
+<button class="start-btn" onclick="doProcess(3,'微噪版')">开始处理</button>
+<div class="progress"><div class="progress-fill" id="bar3"></div></div>
+<div class="progress-text" id="text3">等待处理</div>
+<button class="download-btn" id="down3">下载成品</button>
+</div>
+
+<div class="panel" id="box4">
+<div class="upload-box">
+<input type="file" class="real-file" id="file4" accept=".wav" onchange="showFile(4,this)">
+点击或拖拽 WAV 音频上传
+</div>
+<div class="file-info" id="name4"></div>
+<div class="tip">仅支持 WAV 采样率≤48000</div>
+<button class="start-btn" onclick="doProcess(4,'综合版')">开始处理</button>
+<div class="progress"><div class="progress-fill" id="bar4"></div></div>
+<div class="progress-text" id="text4">等待处理</div>
+<button class="download-btn" id="down4">下载成品</button>
+</div>
+
+<div class="double-box">
+<div class="left">
+<div class="section">
+<h3>重要声明</h3>
+<p>本应用采用AI算法去声纹+母带处理，处理过程必然存在一定音损，请务必先试用满意后再购买！</p>
+<p>本商品为虚拟服务，一经激活/使用，正常情况不退不换；若确因应用自身程序故障无法使用，可按剩余天数比例退款。</p>
+<p>本应用已做特殊安全加固，一机一码绑定设备，严禁转发、分享、倒卖、破解。</p>
+<p class="red">因私自转发、分享、倒卖、破解、修改应用导致绑定失效、会员异常、功能损坏等问题，一律不退不换、不补不赔、不提供售后。</p>
+</div>
+
+<div class="section">
+<h3>支持格式 & 推荐浏览器</h3>
+<p>仅支持上传：WAV 格式</p>
+<p>上传采样率：≤48000</p>
+<p>下载输出：固定 44100 / 16bit WAV</p>
+<p>强烈推荐使用：Chrome、Edge、Firefox、Safari</p>
+</div>
+</div>
+
+<div class="right">
+<div class="section">
+<h3>配套工具网站</h3>
+<p>🔗 AI声纹检测：<a href="https://submithub.com" target="_blank">https://submithub.com</a></p>
+<p>🔗 歌曲响度查询：<a href="https://lufs.org" target="_blank">https://lufs.org</a></p>
+<p>🔗 免费母带处理：<a href="https://bandlab.com/mastering" target="_blank">https://bandlab.com/mastering</a></p>
+<p>🔗 人声分离：<a href="https://mvsep.com/zh" target="_blank">https://mvsep.com/zh</a></p>
+<p>🔗 免费素材：<a href="https://pexels.com/zh-cn" target="_blank">https://pexels.com/zh-cn</a></p>
+<p>🔗 免费素材：<a href="https://pixabay.com" target="_blank">https://pixabay.com</a></p>
+</div>
+</div>
+</div>
+
+<div class="section">
+<h3>会员套餐</h3>
+<table>
+<tr><th>套餐</th><th>价格</th><th>有效期</th><th>次数</th></tr>
+<tr><td>试用</td><td>免费</td><td>1天</td><td>2次</td></tr>
+<tr><td>单次</td><td>8元</td><td>1天</td><td>1次</td></tr>
+<tr><td>三次特惠</td><td>18元</td><td>1天</td><td>3次</td></tr>
+<tr><td>月会员</td><td>68元</td><td>30天</td><td>50次</td></tr>
+<tr><td>季会员</td><td>128元</td><td>90天</td><td>200次</td></tr>
+<tr><td>年会员</td><td>198元</td><td>365天</td><td>1000次</td></tr>
+</table>
+</div>
+</div>
+
+<script>
+// ==============================
+// 【已适配新激活工具】主程序最终版
+// ==============================
+let deviceId = localStorage.getItem("DEVICE_ID") || (()=>{
+  let id="DEV-"+Array.from({length:16},()=>"0123456789ABCDEF"[Math.floor(Math.random()*16)]).join("");
+  localStorage.setItem("DEVICE_ID",id);
+  return id;
+})();
+document.getElementById("deviceCode").innerText = deviceId;
+
+let userInfo = JSON.parse(localStorage.getItem("USER_INFO")) || {valid:false,days:0,times:0,expire:0};
+
+function updateStatus(){
+  let now = Date.now();
+  let ok = userInfo.valid && userInfo.expire > now;
+  let left = ok ? Math.ceil((userInfo.expire - now)/86400000) : 0;
+  document.getElementById("statusBar").innerText =
+    ok ? `状态：正常 | 剩余天数：${left}天 | 剩余次数：${userInfo.times}次`
+    : "状态：未激活 | 剩余天数：0天 | 剩余次数：0次";
+  return ok;
+}
+
+function copyCode(){
+  navigator.clipboard.writeText(deviceId).then(()=>alert("已复制机器码"));
+}
+
+// 激活（匹配激活工具）
+function activeNow(){
+  let code = document.getElementById("activeCode").value.trim();
+  if(!code || code.length!==36) return alert("请输入36位激活码");
+  
+  let list = JSON.parse(localStorage.getItem("YX_CODES_V2"))||[];
+  let item = list.find(x=>x.code===code && !x.used && !x.device);
+  
+  if(!item){
+    alert("激活码无效、已使用或已绑定其他设备");
+    return;
+  }
+  
+  item.device = deviceId;
+  item.used = true;
+  localStorage.setItem("YX_CODES_V2",JSON.stringify(list));
+  
+  userInfo.valid = true;
+  userInfo.days = item.days;
+  userInfo.times = item.times;
+  userInfo.expire = Date.now() + item.days*86400000;
+  localStorage.setItem("USER_INFO",JSON.stringify(userInfo));
+  
+  updateStatus();
+  alert("激活成功！");
+}
+
+function setTab(num){
+  document.querySelectorAll(".panel").forEach(x=>x.classList.remove("active"));
+  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+  document.getElementById("box"+num).classList.add("active");
+  event.target.classList.add("active");
+}
+
+function showFile(num,input){
+  let f=input.files[0];
+  if(f) document.getElementById("name"+num).innerText="已上传："+f.name;
+}
+
+// 处理逻辑不变
+async function doProcess(num,name){
+  if(!updateStatus()) return alert("请先激活");
+  if(userInfo.times<=0) return alert("次数已用完");
+  
+  let file=document.getElementById("file"+num).files[0];
+  if(!file) return alert("请先上传文件");
+  
+  let bar=document.getElementById("bar"+num);
+  let text=document.getElementById("text"+num);
+  let down=document.getElementById("down"+num);
+  
+  bar.style.width="0%"; text.innerText="0% 解码中";
+  let ctx=new AudioContext({sampleRate:48000});
+  let buf=await file.arrayBuffer();
+  let aud=await ctx.decodeAudioData(buf);
+  
+  bar.style.width="40%"; text.innerText="40% 处理中";
+  let out=await run(aud,ctx);
+  
+  bar.style.width="80%"; text.innerText="80% 导出中";
+  let blob=await wav(out);
+  
+  bar.style.width="100%"; text.innerText="100% 完成";
+  down.style.display="block";
+  
+  userInfo.times--;
+  localStorage.setItem("USER_INFO",JSON.stringify(userInfo));
+  updateStatus();
+  
+  down.onclick=()=>{
+    let a=document.createElement("a");
+    a.href=URL.createObjectURL(blob);
+    a.download=file.name.replace(".wav","")+"_"+name+".wav";
+    a.click();
+    setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+  };
+}
+
+async function run(ab,ctx){
+  let out=ctx.createBuffer(ab.numberOfChannels,ab.length,ab.sampleRate);
+  let d=0.15,b=0.08,n=0.012,s=18;
+  for(let c=0;c<ab.numberOfChannels;c++){
+    let d=ab.getChannelData(c),o=new Float32Array(d.length);o.set(d);
+    let sr=ab.sampleRate,c1=sr/0.35,c2=sr/0.65,c3=sr/1.1,c4=sr/2.5;
+    for(let i=0;i<o.length;i++){
+      let m=1+d*0.5*Math.sin(2*Math.PI*i/c1)+d*0.35*Math.cos(2*Math.PI*i/c2)+d*0.25*Math.sin(2*Math.PI*i/c3)+d*0.1*Math.sin(2*Math.PI*i/c4);
+      o[i]*=m;
+    }
+    let bs=Math.floor(sr/4);
+    for(let i=0;i<o.length;i+=bs){
+      let os=(Math.random()-0.5)*2*b*1.5,ed=Math.min(i+bs,o.length);
+      for(let j=i;j<ed;j++){
+        let r=(j-i)/bs;
+        o[j]*=1+Math.sin(r*Math.PI*2+Math.random()*Math.PI*2)*os;
+      }
+    }
+    let tp=0;
+    for(let i=0;i<o.length;i++){
+      let pk=(Math.random()-0.5)*n*0.5;
+      tp=tp*0.95+(Math.random()-0.5)*0.05;
+      let hs=(Math.random()-0.5)*n*0.4*(1+Math.sin(i/1000));
+      o[i]+=pk+tp*0.3+hs;
+    }
+    let t=[...o];
+    for(let i=0;i<o.length;i++){
+      let sm=0,cn=0;
+      for(let j=-s;j<=s;j++){
+        let k=i+j;
+        if(k>=0&&k<t.length){
+          let w=j<0?1.2:(j>0?0.85:1);
+          sm+=t[k]*w;cn+=w;
+        }
+      }
+      o[i]=sm/cn*(0.97+Math.random()*0.06);
+    }
+    out.getChannelData(c).set(o);
+  }
+  return out;
+}
+
+async function wav(buf){
+  let size=buf.length*buf.numberOfChannels*2+44,ab=new ArrayBuffer(size),v=new DataView(ab),p=0;
+  const w16=n=>{v.setUint16(p,n,true);p+=2};
+  const w32=n=>{v.setUint32(p,n,true);p+=4};
+  w32(0x46464952);w32(size-8);w32(0x45564157);w32(0x20746D66);w32(16);
+  w16(1);w16(buf.numberOfChannels);w32(44100);w32(44100*2*buf.numberOfChannels);
+  w16(buf.numberOfChannels*2);w16(16);w32(0x61746164);w32(size-44);
+  for(let i=0;i<buf.length;i++){
+    for(let ch=0;ch<buf.numberOfChannels;ch++){
+      let s=Math.max(-1,Math.min(1,buf.getChannelData(ch)[i]));
+      v.setInt16(p,s*32767,true);p+=2;
+    }
+  }
+  return new Blob([ab],{type:"audio/wav"});
+}
+
+updateStatus();
+</script>
+</body>
+</html>
